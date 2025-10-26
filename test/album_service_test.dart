@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:dio/dio.dart';
 import 'package:mockito/annotations.dart';
@@ -51,9 +52,9 @@ void main() {
           },
         };
 
-        when(mockDio.get<Map<String, dynamic>>(url)).thenAnswer(
+        when(mockDio.get(url)).thenAnswer(
           (_) async => Response(
-            data: mockData,
+            data: jsonEncode(mockData),
             statusCode: 200,
             requestOptions: RequestOptions(path: url),
           ),
@@ -69,7 +70,7 @@ void main() {
     );
 
     test('should throw AppException when API returns 404', () async {
-      when(mockDio.get<Map<String, dynamic>>(url)).thenThrow(
+      when(mockDio.get(url)).thenThrow(
         DioException(
           requestOptions: RequestOptions(path: url),
           response: Response(
@@ -87,7 +88,7 @@ void main() {
     });
 
     test('should throw AppException when API returns 500', () async {
-      when(mockDio.get<Map<String, dynamic>>(url)).thenThrow(
+      when(mockDio.get(url)).thenThrow(
         DioException(
           requestOptions: RequestOptions(path: url),
           response: Response(
@@ -109,9 +110,9 @@ void main() {
         "feed": {"entry": []},
       };
 
-      when(mockDio.get<Map<String, dynamic>>(url)).thenAnswer(
+      when(mockDio.get(url)).thenAnswer(
         (_) async => Response(
-          data: emptyData,
+          data: jsonEncode(emptyData),
           statusCode: 200,
           requestOptions: RequestOptions(path: url),
         ),
@@ -124,7 +125,7 @@ void main() {
     });
 
     test('should throw AppException when network error occurs', () async {
-      when(mockDio.get<Map<String, dynamic>>(url)).thenThrow(
+      when(mockDio.get(url)).thenThrow(
         DioException(
           requestOptions: RequestOptions(path: url),
           type: DioExceptionType.connectionError,
@@ -165,9 +166,9 @@ void main() {
         },
       };
 
-      when(mockDio.get<Map<String, dynamic>>(AppConstants.baseUrl)).thenAnswer(
+      when(mockDio.get(AppConstants.baseUrl)).thenAnswer(
         (_) async => Response(
-          data: mockData,
+          data: jsonEncode(mockData),
           statusCode: 200,
           requestOptions: RequestOptions(path: AppConstants.baseUrl),
         ),
@@ -205,9 +206,9 @@ void main() {
         },
       };
 
-      when(mockDio.get<Map<String, dynamic>>(AppConstants.baseUrl)).thenAnswer(
+      when(mockDio.get(AppConstants.baseUrl)).thenAnswer(
         (_) async => Response(
-          data: mockData,
+          data: jsonEncode(mockData),
           statusCode: 200,
           requestOptions: RequestOptions(path: AppConstants.baseUrl),
         ),
@@ -220,7 +221,7 @@ void main() {
     });
 
     test('should throw AppException when fetchAllAlbums fails', () async {
-      when(mockDio.get<Map<String, dynamic>>(AppConstants.baseUrl)).thenThrow(
+      when(mockDio.get(AppConstants.baseUrl)).thenThrow(
         DioException(
           requestOptions: RequestOptions(path: AppConstants.baseUrl),
           response: Response(
